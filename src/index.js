@@ -4,15 +4,14 @@ import mongoose from 'mongoose';
 
 import routes from './routes.js';
 import cookieParser from 'cookie-parser';
+import { authMiddleware } from './middlewares/authMiddleware.js';
 
 const app = express();
 
 try{
     const uri = 'mongodb://localhost:27017/home-cooking-recipes';
     await mongoose.connect(uri);
-
     console.log('DB connected successfully'); 
-
 } catch (err){
     console.error('Cannot connect to DB');
     console.log(err.message);    
@@ -30,6 +29,7 @@ app.set('views', './src/views');
 app.use(express.static('src/public'));
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(authMiddleware);
 
 app.use(routes);
 
