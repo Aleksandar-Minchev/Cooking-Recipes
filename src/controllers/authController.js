@@ -34,6 +34,12 @@ authController.post('/register', async (req, res) => {
     } catch (err){
         return res.render('auth/register', {error: getErrorMessage(err), user: userData});            
     }    
-})
+});
+
+authController.get('/logout', (req, res) => {
+    res.clearCookie(AUTH_COOKIE);
+    
+    res.redirect('/');
+});
 
 export default authController;
