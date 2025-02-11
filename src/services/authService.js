@@ -1,23 +1,9 @@
 import User from "../models/User.js";
 import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config.js";
+import { generateToken } from "../utils/generateToken.js";
+
 
 export default {
-    async register(userData){
-
-        if (userData.password !== userData.rePassword){
-            throw new Error ('Passwords mismatch');
-        };
-
-        const userId = await User.findOne({ email: userData.email}).select({_id: 1});
-        if (userId){
-            throw new Error("This username already exists");            
-        }
-
-        return User.create(userData); 
-    },
-
     async login (email, password){
         const user = await User.findOne({email});
         if (!user){
@@ -29,14 +15,25 @@ export default {
             throw new Error('Invalid email or password!');
         }
 
-        const payload = {
-            id: user.id,
-            email: user.email,
-            username: user.username
+        const token = generateToken(user);
+
+        return token;        
+    },
+
+    async register(userData){
+
+        if (userData.password !== userData.rePassword){
+            throw new Error ('Passwords mismatch');
+        };
+
+        const userId = await User.findOne({ email: userData.email}).select({_id: 1});
+        if (userId){
+            throw new Error("This username already exists");            
         }
 
-        const token = jwt.sign(payload, JWT_SECRET, {expiresIn: '2h'});
+        const newUser =  await User.create(userData);
+        const token = generateToken(newUser);
 
         return token;
-    }
+    }    
 }
