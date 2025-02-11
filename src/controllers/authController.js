@@ -3,9 +3,14 @@ import authService from "../services/authService.js";
 
 const authController = Router();
 
+authController.get('/login', (req, res) => {
+    res.render('auth/login');
+});
+
 authController.get('/register', (req, res) => {
     res.render('auth/register');
-})
+});
+
 authController.post('/register', async (req, res) => {
     const userData = req.body;
     try{
@@ -15,7 +20,7 @@ authController.post('/register', async (req, res) => {
         console.error(err.message);              
     }
 
-    res.redirect('/auth/login'); 
+    res.redirect('/');
 })
 
 export default authController;
