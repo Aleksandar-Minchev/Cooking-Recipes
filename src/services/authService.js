@@ -8,6 +8,11 @@ export default {
             throw new Error ('Passwords mismatch');
         };
 
-        return User.create(userData) 
+        const userId = await User.findOne({ email: userData.email}).select({_id: 1});
+        if (userId){
+            throw new Error("This username already exists");            
+        }
+
+        return User.create(userData); 
     }
 }
