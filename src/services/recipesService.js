@@ -28,5 +28,21 @@ export default {
 
          return query;
      },
+     
+     async recommend(recipeId, ownerId){
+         const recipe = await Recipe.findById(recipeId);
+        
+         if (recipe.owner?.equals(ownerId)){
+            throw new Error ("You can't recommend your own recipes")
+         }
+         if (recipe.recommendList.includes(ownerId)){
+            throw new Error ("You've already recommended this recipe")
+         }
+
+         recipe.recommendList.push(ownerId);                  
+         
+         return recipe.save();
+     },
+
      }
 }

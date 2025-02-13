@@ -40,16 +40,29 @@ recipesController.post('/create', isAuth, async (req, res) => {
 
 recipesController.get('/:recipeId/details', async (req, res) => {
     const recipeId = req.params.recipeId;
-
+    
     try {
         const recipe = await recipesService.getOne(recipeId);
-        const isOwner = recipe.owner?.equals(req.user?.id)
-        res.render('recipes/details', {recipe, isOwner});
+
+        const isOwner = recipe.owner?.equals(req.user?.id);
+        const isRecommended = recipe.recommendList.includes(req.user?.id);
+
+        res.render('recipes/details', {recipe, isOwner, isRecommended});
     } catch (err) {
-        res.render('/:recipeId/details', {
-            error: getErrorMessage(err)
-        })
+        res.redirect('404');
     }    
+});
+
+recipesController.get('/:recipeId/recommend', isAuth, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const userId = req.user.id;
+    
+    try {
+        const recipe = await recipesService.recommend(recipeId, userId);
+        res.redirect(`/recipes/${recipeId}/details`)
+    } catch (err) {
+        res.redirect('404');
+    }
 });
 
 export default recipesController;

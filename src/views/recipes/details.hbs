@@ -25,8 +25,11 @@
                     <a href="/recipes/{{recipe.id}}/edit">Edit</a>
                     <a href="/recipes/{{recipe.id}}/delete">Delete</a>
                 {{else}}
+                    {{#if isRecommended}}
+                    <p>You've already recommended this recipe!</p> 
+                    {{else}}
                     <a href="/recipes/{{recipe.id}}/recommend">Recommend</a>
+                    {{/if}}
                 {{/if}}
                 </div>
-             {{!-- <p>You've already recommended this recipe!</p>  --}}
         {{/if}}
