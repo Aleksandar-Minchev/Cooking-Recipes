@@ -12,5 +12,15 @@ export default {
 
      getLastThree (){
         return Recipe.find({}).sort({_id: 'desc'}).limit(3);
+     },
+
+     getAll (filter = {}){
+         let query = Recipe.find({});
+ 
+         if (filter.title){
+             query = query.find({title: filter.title});
+         }
+          
+         return query;
      }
 }
