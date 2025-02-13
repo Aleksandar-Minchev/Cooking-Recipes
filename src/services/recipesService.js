@@ -28,7 +28,7 @@ export default {
 
          return query;
      },
-     
+
      async recommend(recipeId, ownerId){
          const recipe = await Recipe.findById(recipeId);
         
@@ -46,5 +46,9 @@ export default {
 
      async remove (recipeId){
          return Recipe.findByIdAndDelete(recipeId);
+     },
+
+      async update (recipeData, recipeId){
+         return Recipe.findByIdAndUpdate(recipeId, recipeData);
      }
 }

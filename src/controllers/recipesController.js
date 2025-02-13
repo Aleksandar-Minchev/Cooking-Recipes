@@ -76,6 +76,34 @@ recipesController.get('/:recipeId/delete', isAuth, async (req, res) => {
     await recipesService.remove(recipeId);
 
     res.redirect('/recipes');
-})
+});
+
+recipesController.get('/:recipeId/edit', isAuth, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const recipe = await recipesService.getOne(recipeId);
+    
+    if (!recipe.owner?.equals(req.user?.id)){
+        return res.redirect('404')
+    }
+
+    res.render('recipes/edit', {recipe})
+});
+
+recipesController.post('/:recipeId/edit', isAuth, async (req, res) => {
+    const recipeData = req.body;
+    const recipeId = req.params.recipeId;
+    const recipe = await recipesService.getOne(recipeId);
+    
+    if (!recipe.owner?.equals(req.user?.id)){
+        return res.redirect('404')
+    }
+    
+    try {
+        await recipesService.update(recipeData, recipeId); 
+        res.redirect(`/recipes/${recipeId}/details`);       
+    } catch (err) {
+      res.render('recipes/edit', {recipe: recipeData, error: getErrorMessage(err)});  
+    }
+});
 
 export default recipesController;
