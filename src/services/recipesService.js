@@ -8,5 +8,9 @@ export default {
         });
 
         return result;
+     },
+
+     getLastThree (){
+        return Recipe.find({}).sort({_id: 'desc'}).limit(3);
      }
 }

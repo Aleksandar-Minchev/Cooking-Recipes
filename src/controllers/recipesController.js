@@ -12,7 +12,7 @@ recipesController.get('/create', isAuth, (req, res) => {
 
 recipesController.post('/create', isAuth, async (req, res) => {
     const recipeData = req.body;
-    const ownerId = req.user?.id;
+    const ownerId = req.user.id;
 
     console.log(recipeData);    
     try {
