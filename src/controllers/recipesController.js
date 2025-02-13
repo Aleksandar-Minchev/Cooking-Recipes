@@ -21,6 +21,7 @@ recipesController.get('/create', isAuth, (req, res) => {
     res.render('recipes/create');
 });
 
+
 recipesController.post('/create', isAuth, async (req, res) => {
     const recipeData = req.body;
     const ownerId = req.user.id;
@@ -33,6 +34,20 @@ recipesController.post('/create', isAuth, async (req, res) => {
         res.render('recipes/create', {
             error: getErrorMessage(err),
             recipes: recipeData
+        })
+    }    
+});
+
+recipesController.get('/:recipeId/details', async (req, res) => {
+    const recipeId = req.params.recipeId;
+
+    try {
+        const recipe = await recipesService.getOne(recipeId);
+        const isOwner = recipe.owner?.equals(req.user?.id)
+        res.render('recipes/details', {recipe, isOwner});
+    } catch (err) {
+        res.render('/:recipeId/details', {
+            error: getErrorMessage(err)
         })
     }    
 });

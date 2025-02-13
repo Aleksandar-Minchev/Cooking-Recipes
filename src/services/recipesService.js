@@ -20,7 +20,13 @@ export default {
          if (filter.title){
              query = query.find({title: filter.title});
          }
-          
+
          return query;
+     },
+     getOne(recipeId) {
+         const query = Recipe.findById(recipeId);
+
+         return query;
+     },
      }
 }
