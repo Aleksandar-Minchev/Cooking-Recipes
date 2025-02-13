@@ -44,5 +44,7 @@ export default {
          return recipe.save();
      },
 
+     async remove (recipeId){
+         return Recipe.findByIdAndDelete(recipeId);
      }
 }

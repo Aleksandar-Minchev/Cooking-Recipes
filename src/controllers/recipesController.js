@@ -65,4 +65,17 @@ recipesController.get('/:recipeId/recommend', isAuth, async (req, res) => {
     }
 });
 
+recipesController.get('/:recipeId/delete', isAuth, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const recipe = await recipesService.getOne(recipeId);
+
+    if (!recipe.owner?.equals(req.user?.id)){
+        return res.redirect('404')
+    }
+
+    await recipesService.remove(recipeId);
+
+    res.redirect('/recipes');
+})
+
 export default recipesController;
