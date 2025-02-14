@@ -10,13 +10,7 @@
             <div class="recipes">
 
                 {{#each recipes}}
-                <article class="recipe">
-                    <img src="{{image}}"
-                        alt="{{title}}">
-                    <h3>{{title}}</h3>
-                    <p>{{description}}</p>
-                    <a href="/recipes/{{id}}/details">Read More</a>
-                </article>
+                {{>recipes}}
                 {{else}}
                     <p class="no-post">There are no recipes found yet!</p>
                 {{/each}}

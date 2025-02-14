@@ -9,8 +9,7 @@ routes.use(homeController);
 routes.use('/auth', authController);
 routes.use('/recipes', recipesController);
 
-
-routes.get('*', (req, res) => {
+routes.all('*', (req, res) => {
     res.render('404');
 });
 

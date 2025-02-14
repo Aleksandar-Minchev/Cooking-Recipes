@@ -17,6 +17,19 @@ recipesController.get('/', async (req, res) => {
     }    
 })
 
+recipesController.get('/search', async (req, res) => {
+    const filter = req.query;      
+
+    try {
+        const recipes = await recipesService.getAll(filter);
+        res.render('recipes/search', {recipes, filter});        
+    } catch (err) {
+        res.render('recipes/search', {
+            error: getErrorMessage(err)
+        }); 
+    }    
+});
+
 recipesController.get('/create', isAuth, (req, res) => {
     res.render('recipes/create');
 });
@@ -26,7 +39,6 @@ recipesController.post('/create', isAuth, async (req, res) => {
     const recipeData = req.body;
     const ownerId = req.user.id;
 
-    console.log(recipeData);    
     try {
         await recipesService.create(recipeData, ownerId);
         res.redirect('/recipes');
@@ -102,8 +114,10 @@ recipesController.post('/:recipeId/edit', isAuth, async (req, res) => {
         await recipesService.update(recipeData, recipeId); 
         res.redirect(`/recipes/${recipeId}/details`);       
     } catch (err) {
-      res.render('recipes/edit', {recipe: recipeData, error: getErrorMessage(err)});  
+        res.render('recipes/edit', {recipe: recipeData, error: getErrorMessage(err)});  
     }
 });
+
+
 
 export default recipesController;

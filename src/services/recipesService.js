@@ -14,14 +14,15 @@ export default {
         return Recipe.find({}).sort({_id: 'desc'}).limit(3);
      },
 
-     getAll (filter = {}){
-         let query = Recipe.find({});
- 
-         if (filter.title){
-             query = query.find({title: filter.title});
+     async getAll (filter = {}){
+         let recipes = await Recipe.find({});       
+            
+        if (filter.search){                                            
+            recipes = recipes.filter(recipe => 
+                recipe.title.toLowerCase().includes(filter.search.toLowerCase()))
          }
-
-         return query;
+         
+         return recipes;
      },
      getOne(recipeId) {
          const query = Recipe.findById(recipeId);
@@ -49,6 +50,6 @@ export default {
      },
 
       async update (recipeData, recipeId){
-         return Recipe.findByIdAndUpdate(recipeId, recipeData);
+         return Recipe.findByIdAndUpdate(recipeId, recipeData, {runValidators: true});
      }
 }
